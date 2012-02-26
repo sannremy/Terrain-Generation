@@ -1,0 +1,72 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow: hidden;
+	background-color: #fff;
+	color: #000;
+	font-family: Arial, sans-serif;
+	font-size: 80%;
+	cursor: url('../images/cursors/openhand.cur'), default;
+}
+
+a, a:visited {
+	color: #000;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+div#title {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 5px 0 0 5px;
+	font-weight: bold;
+}
+
+span#debug {
+	font-weight: normal;
+	font-family: Courier New;
+}
+
+div#panel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	padding: 5px 5px 0 0;
+	opacity: 0.2;
+	text-align: right;
+}
+
+div#panel:hover {
+	opacity: 1;
+}
+
+#panel ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#panel ul li {
+	margin: 0 0 5px 0;
+}
+
+div#commands {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	padding: 0 0 5px 5px;
+}
+
+div#info {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	padding: 0 5px 5px 0;
+}
