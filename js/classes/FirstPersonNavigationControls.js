@@ -7,7 +7,6 @@
 THREE.FirstPersonNavigationControls = function(object, domElement) {
 	this.object = object;
 	this.object.target = new THREE.Vector3(0, 0, 0);
-	this.object.rotation.set(0, 0, 0);
 	
 	this.domElement = domElement;
 	
@@ -27,7 +26,7 @@ THREE.FirstPersonNavigationControls = function(object, domElement) {
 	
 	// internals (for drag and drop)
 	this._mouseDown = false;
-	this._lon = 0;
+	this._lon = -90;
 	this._lat = 0;
 	this._phi = 0;
 	this._theta = 0;
@@ -59,7 +58,7 @@ THREE.FirstPersonNavigationControls = function(object, domElement) {
 		if(this._mouseDown) {
 			var dragDirection = this.inverseDirection ? 1 : -1;
 			this._lon = this._mouseDownLon+(dragDirection)*(this._mouseDownX-event.clientX)*this.velocity;
-			this._lat = this._mouseDownLat+(dragDirection)*(event.clientY-this._mouseDownY)*this.velocity;
+			this._lat = this._mouseDownLat+(dragDirection)*(this._mouseDownY-event.clientY)*this.velocity;
 		}
 	};
 	
@@ -100,9 +99,9 @@ THREE.FirstPersonNavigationControls = function(object, domElement) {
 
 		if(this.object.rotationAutoUpdate) {
 			this.object.rotation.setFromRotationMatrix(new THREE.Matrix4(
-				x.x, x.y, x.z, 0,
-				y.x, y.y, y.z, 0,
-				z.x, z.y, z.z, 0,
+				-x.x, y.x, z.x, 0,
+				x.y, -y.y, z.y, 0,
+				x.z, y.z, -z.z, 0,
 				0, 0, 0, 0
 			));
 		}
