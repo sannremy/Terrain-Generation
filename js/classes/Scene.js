@@ -13,9 +13,7 @@ Scene = function() {
 	this.near = 1;
 	this.far = 100000;
 	this.camera = new THREE.PerspectiveCamera(this.fov, this.aspect, this.near, this.far);
-	this.camera.position.x = -714;
-	this.camera.position.y = 140;
-	this.camera.position.z = 10;
+	this.camera.position.set(0, 180, 710);
 	
 	// controls
 	this.controls = new THREE.FirstPersonNavigationControls(this.camera, this.viewport);
@@ -26,9 +24,14 @@ Scene = function() {
 	this.fps = 0;
 	
 	this.texture = 'images/textures/grass.jpg';
-	this.material = this.material = new THREE.MeshBasicMaterial({
-		map: THREE.ImageUtils.loadTexture(this.texture)
+	this.textureObject = THREE.ImageUtils.loadTexture(this.texture);
+	this.textureObject.wrapS = THREE.RepeatWrapping;
+	this.textureObject.wrapT = THREE.RepeatWrapping;
+
+	this.material = new THREE.MeshBasicMaterial({
+		map: this.textureObject
 	});
+
 	this.width = 500;
 	this.height = 500;
 	this.segments = 64;
@@ -48,7 +51,7 @@ Scene = function() {
 	this.init = function() {
 		this.updateTerrain(this.width, this.height, this.segments, this.smoothingFactor);
 		
-		this.renderer = new THREE.WebGLRenderer({ antialias: false });
+		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 
 		this.viewport.appendChild(this.renderer.domElement);
@@ -67,7 +70,7 @@ Scene = function() {
 		var index = 0;
 		for(var i = 0; i <= this.segments; i++) {
 			for(var j = 0; j <= this.segments; j++) {
-				this.geometry.vertices[index].position.z = this.terrain[i][j];
+				this.geometry.vertices[index].z = this.terrain[i][j];
 				index++;
 			}
 		}
@@ -146,9 +149,9 @@ Scene = function() {
 				baseGeometry.vertices[i].position.z = -this.deepth;
 			}
 			
-			leftMesh = new THREE.Mesh(leftGeometry, this.material);
-			topMesh = new THREE.Mesh(topGeometry, this.material);
-			baseMesh = new THREE.Mesh(baseGeometry, this.material);
+			leftMesh = new THREE.Mesh(leftGeometry);
+			topMesh = new THREE.Mesh(topGeometry);
+			baseMesh = new THREE.Mesh(baseGeometry);
 			
 			leftMesh.position.y = this.width > this.height ? Math.min(this.width, this.height) : Math.max(this.width, this.height);
 			leftMesh.rotation.x = Math.PI/180 * 180;
@@ -171,6 +174,7 @@ Scene = function() {
 		}
 		
 		this.mesh.rotation.x = Math.PI / 180 * (-90);
+		this.mesh.doubleSided = true;
 		this.scene.add(this.mesh);
 	};
 	
@@ -181,13 +185,18 @@ Scene = function() {
 	this.setTexture = function(texture) {
 		this.texture = texture;
 		if(this.texture !== null) {
+			this.textureObject = THREE.ImageUtils.loadTexture(this.texture);
+			this.textureObject.wrapS = THREE.RepeatWrapping;
+			this.textureObject.wrapT = THREE.RepeatWrapping;
+			this.textureObject.repeat.set(2, 2);
+
 			this.material = new THREE.MeshBasicMaterial({
-				map: THREE.ImageUtils.loadTexture(this.texture)
+				map: this.textureObject
 			});
 		}
 		else {
 			this.material = new THREE.MeshBasicMaterial({
-				color : 0x000000,
+				color : 0xCCCCCC,
 				wireframe : true
 			});
 		}

@@ -7,6 +7,7 @@
 THREE.FirstPersonNavigationControls = function(object, domElement) {
 	this.object = object;
 	this.object.target = new THREE.Vector3(0, 0, 0);
+	this.object.rotation.set(0, 0, 0);
 	
 	this.domElement = domElement;
 	
@@ -69,50 +70,42 @@ THREE.FirstPersonNavigationControls = function(object, domElement) {
 	// update function
 	this.update = function(delta) {
 		this.firstPersonControls.update(delta);
-		
+
 		this._lat = Math.max(-90, Math.min(90, this._lat));
 		this._phi = (90-this._lat)*Math.PI/180;
 		this._theta = this._lon * Math.PI/180;
-		
+
 		this.object.target.x = Math.sin(this._phi)*Math.cos(this._theta);
 		this.object.target.y = Math.cos(this._phi);
 		this.object.target.z = Math.sin(this._phi)*Math.sin(this._theta);
+
+		var x = new THREE.Vector3(),
+		y = new THREE.Vector3(),
+		z = new THREE.Vector3();
 		
-		var x = THREE.Matrix4.__v1,
-		y = THREE.Matrix4.__v2,
-		z = THREE.Matrix4.__v3;
-		
-		z.x = -this.object.target.x;
-		z.y = -this.object.target.y;
-		z.z = -this.object.target.z;
+		z.set(-this.object.target.x, this.object.target.y, this.object.target.z);
 		z.normalize();
 
 		if (z.length() === 0)
 			z.z = 1;
 
-		x.cross(this.object.up, z).normalize();
+		x.crossVectors(this.object.up, z).normalize();
 
 		if (x.length() === 0) {
 			z.x += 0.0001;
-			x.cross(this.object.up, z).normalize();
+			x.crossVectors(this.object.up, z).normalize();
 		}
 
-		y.cross(z, x).normalize();
+		y.crossVectors(z, x).normalize();
 
-		this.object.matrix.n11 = x.x;
-		this.object.matrix.n12 = y.x;
-		this.object.matrix.n13 = z.x;
-		
-		this.object.matrix.n21 = x.y;
-		this.object.matrix.n22 = y.y;
-		this.object.matrix.n23 = z.y;
-		
-		this.object.matrix.n31 = x.z;
-		this.object.matrix.n32 = y.z;
-		this.object.matrix.n33 = z.z;
-
-		if(this.object.rotationAutoUpdate)
-			this.object.rotation.setRotationFromMatrix(this.object.matrix);
+		if(this.object.rotationAutoUpdate) {
+			this.object.rotation.setFromRotationMatrix(new THREE.Matrix4(
+				x.x, x.y, x.z, 0,
+				y.x, y.y, y.z, 0,
+				z.x, z.y, z.z, 0,
+				0, 0, 0, 0
+			));
+		}
 	};
 	
 	function bind(scope, fn) {
