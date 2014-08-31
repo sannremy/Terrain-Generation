@@ -22,15 +22,6 @@ Scene = function() {
 	this.lastDate = (new Date()).getTime();
 	this.frames = 0;
 	this.fps = 0;
-	
-	this.texture = 'images/textures/grass.jpg';
-	this.textureObject = THREE.ImageUtils.loadTexture(this.texture);
-	this.textureObject.wrapS = THREE.RepeatWrapping;
-	this.textureObject.wrapT = THREE.RepeatWrapping;
-
-	this.material = new THREE.MeshBasicMaterial({
-		map: this.textureObject
-	});
 
 	this.width = 500;
 	this.height = 500;
@@ -41,6 +32,18 @@ Scene = function() {
 	this.info = false;
 	this.fog = 0.001;
 	this.deepth = -80;
+
+	this.texture = 'images/textures/grass.jpg';
+	this.textureObject = THREE.ImageUtils.loadTexture(this.texture);
+	this.textureObject.wrapS = THREE.RepeatWrapping;
+	this.textureObject.wrapT = THREE.RepeatWrapping;
+	this.textureRepeatX = 2;
+	this.textureRepeatY = 2;
+	this.textureObject.repeat.set(this.textureRepeatX, this.textureRepeatY);
+
+	this.material = new THREE.MeshBasicMaterial({
+		map: this.textureObject
+	});
 	
 	this.geometry;
 	this.mesh;
@@ -180,6 +183,10 @@ Scene = function() {
 		this.texture = texture;
 		if(this.texture !== null) {
 			this.textureObject = THREE.ImageUtils.loadTexture(this.texture);
+			this.textureObject.wrapS = THREE.RepeatWrapping;
+			this.textureObject.wrapT = THREE.RepeatWrapping;
+			this.textureObject.repeat.set(2, 2);
+
 			this.material = new THREE.MeshBasicMaterial({
 				map: this.textureObject
 			});
