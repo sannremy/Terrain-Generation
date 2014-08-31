@@ -5,15 +5,15 @@ html, body {
 
 body {
 	overflow: hidden;
-	background-color: #fff;
-	color: #000;
+	background-color: #000;
+	color: #fff;
 	font-family: Arial, sans-serif;
 	font-size: 80%;
 	cursor: url('../images/cursors/openhand.cur'), default;
 }
 
 a, a:visited {
-	color: #000;
+	color: #fff;
 	text-decoration: none;
 }
 
@@ -39,7 +39,7 @@ div#panel {
 	top: 0;
 	right: 0;
 	padding: 5px 5px 0 0;
-	opacity: 0.2;
+	opacity: 0.4;
 	text-align: right;
 }
 
