@@ -25,7 +25,8 @@
 <div id="commands">Drag with the mouse and press a, w, d, s or &larr;, &uarr;, &rarr;, &darr; and r, f keys for navigation</div>
 <div id="info"><a href="http://srchea.com">srchea.com</a> | <a href="http://twitter.com/srchea">Follow me</a></div>
 <div id="viewport"></div>
-<script src="js/classes/Three.js"></script>
+<script src="js/classes/three.min.js"></script>
+<script src="js/classes/FirstPersonControls.js"></script>
 <script src="js/classes/FirstPersonNavigationControls.js"></script>
 <script src="js/classes/RequestAnimationFrame.js"></script>
 <script src="js/classes/TerrainGeneration.js"></script>
