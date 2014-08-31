@@ -85,29 +85,29 @@ Scene = function() {
 		this.scene.remove(this.mesh);
 		if(this.border) {
 			// sides
-			var leftGeometry = new THREE.PlaneGeometry(this.width, 10, this.segments, 1);
-			a = 0;
+			var leftGeometry = new THREE.PlaneGeometry(this.width, 10, this.segments, 1), a = 0;
+
 			for(var i = this.segments; i >= 0; i--) {
-				leftGeometry.vertices[a].position.z = this.terrain[0][i];
-				leftGeometry.vertices[a].position.y = this.height/2;
+				leftGeometry.vertices[a].z = this.terrain[0][i];
+				leftGeometry.vertices[a].y = -this.height/2;
 				a++;
 			}
 			for(var i = 0; i <= this.segments; i++) {
-				leftGeometry.vertices[a].position.z = this.deepth;
-				leftGeometry.vertices[a].position.y = this.height/2;
+				leftGeometry.vertices[a].z = this.deepth;
+				leftGeometry.vertices[a].y = -this.height/2;
 				a++;
 			}
 			
 			var rightGeometry = new THREE.PlaneGeometry(this.width, 10, this.segments, 1);
 			a = 0;
 			for(var i = 0; i <= this.segments; i++) {
-				rightGeometry.vertices[a].position.z = this.terrain[this.segments][i];
-				rightGeometry.vertices[a].position.y = -this.height/2;
+				rightGeometry.vertices[a].z = this.terrain[this.segments][i];
+				rightGeometry.vertices[a].y = -this.height/2;
 				a++;
 			}
 			for(var i = 0; i <= this.segments; i++) {
-				rightGeometry.vertices[a].position.z = this.deepth;
-				rightGeometry.vertices[a].position.y = -this.height/2;
+				rightGeometry.vertices[a].z = this.deepth;
+				rightGeometry.vertices[a].y = -this.height/2;
 				a++;
 			}
 			
@@ -115,15 +115,15 @@ Scene = function() {
 			a = 0;
 			
 			for(var i = this.segments; i >= 0; i--) {
-				topGeometry.vertices[a].position.z = this.terrain[i][0];
-				topGeometry.vertices[a].position.x = this.width/2;
-				topGeometry.vertices[a].position.y = this.height/2-a*(this.height/this.segments);
+				topGeometry.vertices[a].z = this.terrain[i][0];
+				topGeometry.vertices[a].x = -this.width/2;
+				topGeometry.vertices[a].y = this.height/2-a*(this.height/this.segments);
 				a++;
 			}
 			for(var i = 0; i <= this.segments; i++) {
-				topGeometry.vertices[a].position.z = this.deepth;
-				topGeometry.vertices[a].position.x = this.width/2;
-				topGeometry.vertices[a].position.y = this.height/2-i*(this.height/this.segments);
+				topGeometry.vertices[a].z = this.deepth;
+				topGeometry.vertices[a].x = -this.width/2;
+				topGeometry.vertices[a].y = this.height/2-i*(this.height/this.segments);
 				a++;
 			}
 			
@@ -131,42 +131,36 @@ Scene = function() {
 			a = 0;
 			
 			for(var i = 0; i <= this.segments; i++) {
-				bottomGeometry.vertices[a].position.z = this.terrain[i][this.segments];
-				bottomGeometry.vertices[a].position.x = -this.width/2;
-				bottomGeometry.vertices[a].position.y = this.height/2-i*(this.height/this.segments);
+				bottomGeometry.vertices[a].z = this.terrain[i][this.segments];
+				bottomGeometry.vertices[a].x = -this.width/2;
+				bottomGeometry.vertices[a].y = this.height/2-i*(this.height/this.segments);
 				a++;
 			}
 			for(var i = 0; i <= this.segments; i++) {
-				bottomGeometry.vertices[a].position.z = this.deepth;
-				bottomGeometry.vertices[a].position.x = -this.width/2;
-				bottomGeometry.vertices[a].position.y = this.height/2-i*(this.height/this.segments);
+				bottomGeometry.vertices[a].z = this.deepth;
+				bottomGeometry.vertices[a].x = -this.width/2;
+				bottomGeometry.vertices[a].y = this.height/2-i*(this.height/this.segments);
 				a++;
 			}
 			
 			// base
 			var baseGeometry = new THREE.PlaneGeometry(this.width, this.height, 1, 1);
 			for(var i = 0; i < baseGeometry.vertices.length; i++) {
-				baseGeometry.vertices[i].position.z = -this.deepth;
+				baseGeometry.vertices[i].z = -this.deepth;
 			}
+
+			leftGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI));
+			leftGeometry.applyMatrix(new THREE.Matrix4().makeRotationY(Math.PI));
+			topGeometry.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI));
+			baseGeometry.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI));
 			
-			leftMesh = new THREE.Mesh(leftGeometry);
-			topMesh = new THREE.Mesh(topGeometry);
-			baseMesh = new THREE.Mesh(baseGeometry);
+			this.combined.merge(leftGeometry);
+			this.combined.merge(rightGeometry);
+			this.combined.merge(topGeometry);
+			this.combined.merge(bottomGeometry);
+			this.combined.merge(baseGeometry);
 			
-			leftMesh.position.y = this.width > this.height ? Math.min(this.width, this.height) : Math.max(this.width, this.height);
-			leftMesh.rotation.x = Math.PI/180 * 180;
-			leftMesh.rotation.y = Math.PI/180 * 180;
-			topMesh.position.x = this.width > this.height ? Math.max(this.width, this.height) : Math.min(this.width, this.height);
-			topMesh.rotation.z = Math.PI/180 * 180;
-			baseMesh.rotation.x = Math.PI/180 * 180;
-			
-			THREE.GeometryUtils.merge(this.combined, leftMesh);
-			THREE.GeometryUtils.merge(this.combined, rightGeometry);
-			THREE.GeometryUtils.merge(this.combined, topMesh);
-			THREE.GeometryUtils.merge(this.combined, bottomGeometry);
-			THREE.GeometryUtils.merge(this.combined, baseMesh);
-			
-			THREE.GeometryUtils.merge(this.combined, this.geometry);
+			this.combined.merge(this.geometry);
 			this.mesh = new THREE.Mesh(this.combined, this.material);
 		}
 		else {
@@ -186,17 +180,13 @@ Scene = function() {
 		this.texture = texture;
 		if(this.texture !== null) {
 			this.textureObject = THREE.ImageUtils.loadTexture(this.texture);
-			this.textureObject.wrapS = THREE.RepeatWrapping;
-			this.textureObject.wrapT = THREE.RepeatWrapping;
-			this.textureObject.repeat.set(2, 2);
-
 			this.material = new THREE.MeshBasicMaterial({
 				map: this.textureObject
 			});
 		}
 		else {
 			this.material = new THREE.MeshBasicMaterial({
-				color : 0xCCCCCC,
+				color : 0x808080,
 				wireframe : true
 			});
 		}
