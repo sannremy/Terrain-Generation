@@ -26,7 +26,7 @@ THREE.FirstPersonNavigationControls = function(object, domElement) {
 	
 	// internals (for drag and drop)
 	this._mouseDown = false;
-	this._lon = 0;
+	this._lon = 1;
 	this._lat = 0;
 	this._phi = 0;
 	this._theta = 0;

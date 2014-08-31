@@ -16,6 +16,8 @@ Scene = function() {
 	this.camera.position.x = -714;
 	this.camera.position.y = 140;
 	this.camera.position.z = 10;
+
+	this.scene.add(this.camera);
 	
 	// controls
 	this.controls = new THREE.FirstPersonNavigationControls(this.camera, this.viewport);
