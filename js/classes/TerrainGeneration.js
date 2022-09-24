@@ -1,5 +1,5 @@
 /*
- * @author Sann-Remy Chea / http://srchea.com/
+ * @author Sann-Remy Chea / http://sannremy.com/
  * Generate a random terrain using the diamond-square algorithm
  */
 
