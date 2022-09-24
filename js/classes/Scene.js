@@ -1,5 +1,5 @@
 /*
- * @author Sann-Remy Chea / http://srchea.com/
+ * @author Sann-Remy Chea / http://sannremy.com/
  * Add or replace or remove elements in the scene
  */
 Scene = function() {
