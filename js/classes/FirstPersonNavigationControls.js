@@ -1,5 +1,5 @@
 /*
- * @author Sann-Remy Chea / http://srchea.com/
+ * @author Sann-Remy Chea / http://sannremy.com/
  * FirstPersonNavigationControls class enables the mouse drag and drop and arrow keys for navigation.
  * Dependance: FirstPersonControls.js (included in Three.js)
  */
